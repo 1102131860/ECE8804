@@ -2514,7 +2514,7 @@ $$Y = OUT0 = (Q3 + Q2 + Q1 + Q0) \cdot A$$
 
 The formula of final output Y dealy can be written as
 
-$$\text{Total Dealy} = \sum_{i=0}^{N}(Q[i] \times \Delta t) + \tau$$
+$$\text{Total Delay} = \sum_{i=0}^{N}(Q[i] \times \Delta t) + \tau$$
 
 , here $\Delta t$ is difference time between long path and short path of a delay cell.
 
