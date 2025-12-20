@@ -1846,17 +1846,17 @@ $$\Rightarrow \frac{V}{V(0)} = e^{\frac{G}{C}\tau}$$
 
 $$V = V(0)e^{\frac{G}{C}\tau}$$
 
-Let $\Tau = \frac{C}{G}$
+Let $T = \frac{C}{G}$
 
-$$V = V(0)e^{\frac{\tau}{\Tau}}$$
+$$V = V(0)e^{\frac{\tau}{T}}$$
 
 ![Restore Model](./images/image_85.png)
 
 To ensure $V > V_{threshold}$ at $t = t'$ then:
 
-$$V(0)e^{\frac{\tau}{\Tau}} > V_{threshold}$$
+$$V(0)e^{\frac{\tau}{T}} > V_{threshold}$$
 
-$$\Rightarrow V(0) > V_{threshold}e^{-\frac{\tau}{\Tau}}$$
+$$\Rightarrow V(0) > V_{threshold}e^{-\frac{\tau}{T}}$$
 
 The smaller the initial differential voltage V(0), the easier it is for Flip-Flop to get stuck in the metastable state; it takes more time t' to recover.
 
@@ -1872,7 +1872,7 @@ $$P(mf) = \frac{t_a}{T_{cyc}} = T_0e^{-\frac{t_{resolve}}{\tau}}f$$
 
 - $T_0$: related to trigger structure, VDD, circuit gain
 
-- $\tau$: metastability time constance, the previous $\Tau (\frac{C}{G})$
+- $\tau$: metastability time constance, the previous $T =(\frac{C}{G})$
 
     - The larger $\tau$, the slower the recovery $\rightarrow$ metastability occurs more often
 
@@ -1890,11 +1890,11 @@ $$P(mf) = \frac{t_a}{T_{cyc}} = T_0e^{-\frac{t_{resolve}}{\tau}}f$$
 
 ![MTBF of asynchronous inputs](./images/image_87.png)
 
-$$failure \text{\_} rate = f_DfT_0e^{-\frac{T_{clk} - T_{setup}}{\tau}}$$
+$$\text{failure rate} = f_DfT_0e^{-\frac{T_{clk} - T_{setup}}{\tau}}$$
 
 The **Mean time between failure (MBTF)** will be
 
-$$MTBF = \frac{1}{failure \text{\_} rate} = \frac{e^{\frac{T_{clk} - T_{setup}}{\tau}}}{f_DfT_0}$$
+$$MTBF = \frac{1}{\text{failure rate}} = \frac{e^{\frac{T_{clk} - T_{setup}}{\tau}}}{f_DfT_0}$$
 
 - The larger $\frac{T_{clk} - T_{setup}}{\tau}$ is, the MTBF will improve a lot
 
@@ -1912,13 +1912,13 @@ $$=10^9 \times 50 \times 10^{-12} \times e^{-\frac{1n - 300p - 100p}{100p}}$$
 
 $$= 1.2 \times 10^{-4}$$
 
-$$failure \text{\_} rate (\text{per second}) = f_D \times P(mf)$$
+$$\text{failure rate} (\text{per second}) = f_D \times P(mf)$$
 
 $$= 1.2 \times 10^{-4} \times 400 \times 10^{6}$$
 
 $$= 48000$$
 
-$$MTBF = \frac{1}{failure \text{\_} rate (\text{per second})} = 20.8 \mu s$$
+$$MTBF = \frac{1}{\text{failure rate} (\text{per second})} = 20.8 \mu s$$
 
 ### Taxonomy of Clock Domain Crossings (CDC)
 
