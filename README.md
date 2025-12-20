@@ -1,17 +1,17 @@
 # ECE8804 VLSI Theory to Tapeout
 
-The [note.md](./note.md) is comprised of
+The [notes.md](./notes.md) is comprised of
 
-1. [Timing Closure](./note.md#timing-closure)
-2. [Synthesis](./note.md#synthesis)
-3. [APR (Automatically Placement and Routing)](./note.md#apr-automatic-placement--routing)
-4. [Pipeling and multi-cycle](./note.md#pipelining)
-5. [Power and Energy](./note.md#power)
-6. [Design For Testability](./note.md#design-of-testability)
-7. [Asynchronous and Synchronous Reset](./note.md#reset)
-8. [Baics of Memory](./note.md#memory)
-9. [Clock Domains and Metastability](./note.md#clock-domains)
-10. [DLL (Delay Lock Loop)](./note.md#dlls)
+1. [Timing Closure](./notes.md#timing-closure)
+2. [Synthesis](./notes.md#synthesis)
+3. [APR (Automatically Placement and Routing)](./notes.md#apr-automatic-placement--routing)
+4. [Pipeling and multi-cycle](./notes.md#pipelining)
+5. [Power and Energy](./notes.md#power)
+6. [Design For Testability](./notes.md#design-of-testability)
+7. [Asynchronous and Synchronous Reset](./notes.md#reset)
+8. [Baics of Memory](./notes.md#memory)
+9. [Clock Domains and Metastability](./notes.md#clock-domains)
+10. [DLL (Delay Lock Loop)](./notes.md#dlls)
 
 which will cover the below content
 
