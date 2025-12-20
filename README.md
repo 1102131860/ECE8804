@@ -27,4 +27,4 @@ which will cover the below content
 - Clock generation and distribution basics (PLLs, DLLs, distribuMon structures).
 - Process, Voltage and Temperature Variability (PVT)
 
-There are also some [assignments](./assignment/), and [a tape-out project](./project/) and [reference](./reference/) in this course. Look those folders to see more details
+There are also some [assignments](./assignment/), and [a tape-out project](./project/) and [references](./reference/) in this course. Look those folders to see more details
