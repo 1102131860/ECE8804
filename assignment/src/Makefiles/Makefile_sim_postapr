@@ -1,0 +1,83 @@
+TOPLEVEL=gcd
+TESTNAME=default
+SRC_VERILOG=../../src/verilog
+APR_FOLDER=../../apr/results
+SRC_FOLDER= $(SRC_VERILOG)
+SIM=0
+SDF=1
+
+#Build up a list of verilog define statements to be used by vcs
+
+VERILOG_DEFINES:= 
+ifeq ($(SIM), 1)
+		VERILOG_DEFINES := $(VERILOG_DEFINES)+SIM=1
+endif
+ifeq ($(SDF), 1)
+		VERILOG_DEFINES := $(VERILOG_DEFINES)+SDF=1
+endif
+
+
+
+
+.DEFAULT_GOAL := vcs
+
+# Move all the verilog files from the source directory over to this simulation directory. Being disciplined about file naming
+# allows you to automate a lot of these menial and occassionally error inducing tasks.
+link_files:
+	find $(SRC_FOLDER) -name '*apr.include' -exec ln -s -f {} ';'
+	find $(SRC_FOLDER) -name '*_pkg.sv' -exec ln -s -f {} ';'
+	find $(SRC_FOLDER) -name 'tb_*sapr.sv' -exec ln -s -f {} ';'
+	find $(SRC_FOLDER) -name '*tasks*.sv' -exec ln -s -f {} ';'
+	find $(SRC_FOLDER) -name '*.cfg' -exec ln -s -f {} ';'
+	find $(APR_FOLDER) -name '*.v' -exec ln -s -f {} ';'
+	find $(APR_FOLDER) -name '*.sdf' -exec ln -s -f {} ';'
+	ln -s $(APR_FOLDER) apr_results
+
+
+vcs:$(TOPLEVEL)_apr.include
+	vcs -f $(TOPLEVEL)_apr.include +v2k -R +lint=all -sverilog -full64 \
+		-timescale=1ns/10ps -debug_acc+pp+dmptf -debug_region+cell+encrypt \
+		-debug_access -l $(TOPLEVEL).log +define+$(VERILOG_DEFINES) +testname=$(TESTNAME) \
+		-cm fsm+line+assert \
+		-lca -kdb
+		#simv
+
+vrd:
+	verdi -dbdir ./simv.daidir/ &
+
+urg:
+	urg -dir simv.vdb -format text -report cover_report
+
+wipe:
+	rm -rf *.include
+	rm -rf alib-52
+	rm -rf $(TOPLEVEL)
+	rm -rf simv.daidir
+	rm -rf DVEfiles
+	rm -rf *_log
+	rm -rf *.log
+	rm -rf *.vpd
+	rm -rf ucli.key
+	rm -rf default.svf
+	rm -rf simv
+	rm -rf *.sv *.v *.svh
+	rm -rf csrc
+	rm -rf *.sdf
+	rm -rf apr_results
+	rm -rf novas*
+	rm -rf *.fsdb
+	rm -rf verdi*
+	rm -rf *.cfg
+
+clean:
+	rm -rf DVEfiles
+	rm -rf *.log
+	rm -rf *.vpd
+	rm -rf ucli.key
+	rm -rf alib-52
+	rm -rf $(TOPLEVEL)
+	rm -rf simv.daidir
+	rm -rf csrc
+	rm -rf simv
+
+

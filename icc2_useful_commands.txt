@@ -1,0 +1,171 @@
+
+#start GUI
+icc_shell>start_gui
+
+#report max transition constaints
+icc_shell> report_constraint -max_transition -verbose 
+
+#report timing with transition with pins (through that pin)
+icc_shell> report_timing -thr <instance_name>/<pin_name>
+
+#report timing from register clk to d of next flipflop
+icc_shell> report_timing -to <instance1_name>/<pin_name> -from <instance2_name>/clk
+
+#see complete clock path
+icc_shell>report_timing -to <pin_name> -path_type full_clock_expanded -delay max
+
+#high light path in GUI
+icc_shell>change_selection [get_timing_paths -to <instace_name>/<pin>]
+
+#see clock tree information
+icc_shell>report_clock_tree
+
+#shows the worst path timing with the given clock
+icc_shell>report_timing -group <group_name>
+
+#prints only end points
+icc_shell>report_timing -to readary -path_type short -max_paths 5
+
+#summary of all
+icc_shell>report_qor
+
+
+#insert buffer
+icc_shell>insert_buffer <instance_name>/d -lib_cell <lib_name>
+
+#insert clock inverters
+icc_shell>insert_buffer <instance_name>/<clk pin> -lib_cell <lib inverter> -inverter_pair
+
+#legalize placement incrementally 
+icc_shell>legalize_placement -incremental
+
+#list the lib cells
+icc_shell>get_lib_cell
+
+#set false path
+icc_shell>set_false_path -from <instance1_name>/<pin_name> -to <instance2_name>/<pin_name>
+
+#list of all cells matching with instance name and also sequencial elements
+>get_cells *<name>* -filter "is_sequential==true"
+
+#finding sizeof of collection
+>sizeof_collections [get_cells *<name>* -filter "is_sequential==true"]
+
+#show the terminal names
+>get_terminals *<name>*
+
+#check the direction of port
+>get_attribute [get_ports <port_name>] direction
+
+#check if constant value is driven on any pin
+>get_attribute [get_pins <instance_name>/<pin>] constant_value
+
+
+#get any standardcells with xnor in the clock path
+>filter_collection [all_fanout -clock_tree -only_cells -flat -levels 1000000 ] "ref_name=~*xnor*"
+
+#list of all cells from previous flipflop
+>lsort -uniq [get_attribute  [all_fanin -to <instance_name> -flat -only_cells] -fl_name]
+
+#get exceptions 
+>get_exceptions -from <instance_name>
+
+#report exceptions
+>report_exceptions
+
+#possible list of command with given string
+icc2_shell> help *except*
+ all_exceptions       # Create a collection of exceptions in a mode
+ ctm::get_exceptions  # Returns ctmesh stopping cells/nets/pins collection
+ ctm::is_exception    # Check if -pin|-net|-cell is in ctmesh stopping
+ get_exception_groups # Create a collection of exception groups
+ get_exceptions       # Create a collection of timing exceptions
+ remove_supernet_exceptions # Removes supernet transparent pins
+ report_exceptions    # Report timing exceptions
+ report_supernet_exceptions # Report supernet transparent pins
+ set_supernet_exceptions # Mark supernet transparent pins
+ 
+
+#lists all the attibutes related to net
+>list_attributes -class net -application
+
+#filter collections based on the attribute
+>filter_collection [get_flat_cells *] "size_only==true && full_name=~*<name>*" 
+>filter_collection [all_fanout -from <instance_name>/pin ] "full_name=~*<name1>* || full_name=~*<name2>*"
+ 
+ 
+#set don't touch attribute on all nets except nets connected to matching pin1 and pin2
+>set_dont_touch [get_nets -of_objects  [get_pins -of_objects [get_cells *<instance_name>*] -filter "name!=<pin1> && name!=<pin2"] -filter "full_name=~*<net_name1>* || full_name=~*<net_name2>*]
+>set_attribute [get_nets -of_objects  [get_pins -of_objects [get_flat_cells *<instance_name>* -filter "full_name!~*<match_name>*"] -filter "name!=<pin1> && name!=<pin2>"]] dont_touch true
+
+#report name rules
+>report_name_rules
+
+#define the rule if not there, Lower case only + numbers and _
+>define_name_rules LC_ONLY -allowed "a-z 0-9"
+
+
+#define renaming rule and then apply rules
+>define_name_rules my_map_rule -map {{"first","second_renamed"}}
+>change_names -rules my_map_rule
+
+#rename instances
+>set_attribute -objects [get_cells {{instance[1]_abcd}}] -name name -value instance_1_abcd
+
+
+#stop propogating clock
+>set_clock_sense -logical_stop_propagation  <instance_name>/clk
+
+#report clock gating checks
+>report_clock_gating_check
+
+#reports all the violations
+>report_constraints -min_delay -all_violators -scenarios <scenario name>
+
+
+#reports if clock property is on the pin
+>get_attribute [get_selection] clocks or get_attribute [get_pins <instance_name>/<pin_name>] clocks
+
+
+#replace a cell with different size or refname, sometime helps to resolve shorts
+>change_link [get_cell <instance_name>] <lib_cell_to_be_replaced.
+
+
+#unfix objects(if only fixed) so that it can be moved on legalize placements
+>set_fixed_objects [get_cells <instance_name>*] -unfix
+
+
+#getting the lower left x for bbox, similarly upper right x(bbox_urx) and upper right y(bbox_ury)
+>get_attribute [gs] bbox_llx
+
+
+#get app options
+>get_app_options *hold*
+
+#hold fixing in icc2, run this after cts
+>set_app_options -name clock_opt.hold.effort -value high
+>set_app_options -name refine_opt.hold.effort -value high
+
+#finding the proc source
+>get_proc_source <proc_name>
+
+#max transition report
+>report_constraints -all_violators -max_transition > transition.txt
+
+#reports pvt etc about each corner
+>report_corners
+
+#reports derate setting for current corner
+>report_timing_derate
+
+#choose layer for a net
+>set_routing_rule -min_routing_layer <min_metal> -max_routing_layer <max_metal> {net_name1 net_name2}
+
+#set clock balance points
+>set_clock_balance_points -consider_for_balancing true -balance_points "instance1/clk_pin instance2/clk_pin"
+
+
+
+
+
+

@@ -1,0 +1,85 @@
+# TCL scripts
+TOPLEVEL=gcd
+PRJ=..
+
+SRC_TCL=$(PRJ)/src/apr
+TCL_MAIN=apr.tcl
+
+SRC_VERILOG:= $(PRJ)/src/verilog/$(TOPLEVEL).sv $(PRJ)/src/verilog/$(TOPLEVEL)_pkg.sv
+SYN_FILES:= $(PRJ)/syn/results/$(TOPLEVEL).syn.v \
+			   $(PRJ)/syn/results/$(TOPLEVEL).sdc 	
+
+# Directories
+RESULTDIR=./results 
+REPORTDIR=./reports
+MACRODIR=../src/macro_prep
+SCRIPTDIR=../scripts
+NDMDIR=/home/ece4804/tsmc/65GP/
+
+# Tools
+ICC=/tools/software/synopsys/icc/latest/bin/icc_shell
+LM=/tools/software/synopsys/icc2/latest/bin/lm_shell
+
+TCL_FILES:= $(shell find $(SRC_TCL) -type f)
+
+.PHONY = design, icc2, clean, wipe, link_tcl, link_syn, gen_ndm
+
+design: 
+	-make clean
+	-make link_src
+	-make icc2
+
+
+icc2: results/$(TOPLEVEL).apr.v
+
+# $(SYN_FILES):$(SRC_VERILOG) 
+	# make -C $(PRJ)/syn
+	# echo "trying to synthesize"
+
+
+link_src:
+	find $(SRC_TCL) -name '*.txt' -exec ln -s -f {} ';'
+	find $(SRC_TCL) -name '*.tcl' -exec ln -s -f {} ';'
+	find $(SRC_TCL) -name '*.tpl' -exec ln -s -f {} ';'
+	find $(SCRIPTDIR) -name '*.py' -exec ln -s -f {} ';'
+	find $(PRJ)/syn/results/ -name '$(TOPLEVEL).*' -exec ln -s -f {} ';'
+	mkdir -p ndm
+	ln -s $(NDMDIR) ./ndm
+
+
+# If you do not have access to the shared .ndm, but have access to TSMC65GP, run this first:
+gen_ndm:
+	$(ICC) -64bit -shared_license -output_log_file icc.log -f export_mw_fram.tcl
+	$(LM) -output_log_file lm.log -f library_manager.tcl
+
+
+results/$(TOPLEVEL).apr.v: $(TCL_FILES) $(SYN_FILES)
+	icc2_shell -output_log_file icc2.log -f $(TCL_MAIN)
+
+clean:
+	-@ rm -rf $(TOPLEVEL)_lib \
+			  $(RESULTDIR) \
+			  $(REPORTDIR) \
+			  alib-52 \
+			  *.sv \
+			  *.svh \
+			  *.tcl \
+			  *.tpl \
+			  *.py \
+			  *.txt \
+			  *.sdf \
+			  *.sdc \
+			  *.db \
+			  *.ddc \
+			  *.svf \
+			  DC_lib\
+			  *.syn.v\
+			  WORK \
+			  *.log \
+			  antenna.rule \
+			  net.acts \
+			  pna_output \
+			  default-* \
+			  ndm \
+			  work_dir \
+			  .graph_data.txt

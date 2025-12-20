@@ -1,0 +1,5 @@
+./gcd.syn.v
+./gcd_pkg.sv
+./tb_gcd_syn.sv
+/tools/pdk/tsmc/musesemi/65MSRFGP/tcbn65gplus_200a/TSMCHOME/digital/Front_End/verilog/tcbn65gplus_200a/tcbn65gplus.v
+

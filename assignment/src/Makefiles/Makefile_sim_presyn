@@ -1,0 +1,72 @@
+TOPLEVEL=gcd
+TESTNAME=default
+SRC_VERILOG=../../src/verilog
+SRC_FOLDER= $(SRC_VERILOG)
+RAND_SEED = 42
+
+#Build up a list of verilog define statements to be used by vcs
+
+VERILOG_DEFINES := +SIM=1
+
+.DEFAULT_GOAL := vcs
+
+# Move all the verilog files from the source directory over to this simulation directory
+link_src:
+	find $(SRC_FOLDER) -name '*.v' -exec ln -s -f {} ';'
+	find $(SRC_FOLDER) -name '*.sv' -exec ln -s -f {} ';'
+	find $(SRC_FOLDER) -name '*.svh' -exec ln -s -f {} ';'
+	find $(SRC_FOLDER) -name '$(TOPLEVEL).include' -exec ln -s -f {} ';'
+
+# A new option has been added here. Take a closer look at -cm. Look it up!
+vcs:$(TOPLEVEL).include
+	vcs -f $(TOPLEVEL).include +v2k -R +lint=all -sverilog -full64 \
+		-timescale=1ns/10ps -debug_access+all -debug_region+cell+encrypt \
+		-debug_access -l $(TOPLEVEL).log +define+$(VERILOG_DEFINES) +testname=$(TESTNAME) \
+		+ntb_random_seed=$(RAND_SEED) \
+		-cm fsm+line+assert \
+		-lca -kdb
+
+vrd:
+	verdi -dbdir ./simv.daidir/ &
+
+urg:
+	urg -dir simv.vdb -format text -report cover_report
+
+wipe: clean
+	rm -rf $(TOPLEVEL).include
+	rm -rf alib-52
+	rm -rf $(TOPLEVEL)
+	rm -rf simv.daidir
+	rm -rf DVEfiles
+	rm -rf *.log
+	rm -rf *.vpd
+	rm -rf ucli.key
+	rm -rf default.svf
+	rm -rf simv
+	rm -rf *.sv *.v *.svh
+	rm -rf csrc
+	rm -rf novas*
+	rm -rf verdi_config_file
+	rm -rf verdiLog
+	rm -rf *.fsdb
+	rm -rf cover_report/
+
+clean:
+	rm -rf DVEfiles
+	rm -rf *.log
+	rm -rf *.vpd
+	rm -rf ucli.key
+	rm -rf alib-52
+	rm -rf $(TOPLEVEL)
+	rm -rf simv.daidir
+	rm -rf csrc
+	rm -rf simv
+	rm -rf novas*
+	rm -rf verdi_config_file
+	rm -rf verdiLog
+	rm -rf *.fsdb
+	rm -rf *.vdb
+	rm -rf vdCovLog
+	rm -rf .fsm.sch.verilog.xml
+	rm -rf vdCov.conf
+	rm -rf cover_report/

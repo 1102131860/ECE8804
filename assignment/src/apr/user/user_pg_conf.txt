@@ -1,0 +1,160 @@
+StrapConfig: PG_M1_M2_RAIL {
+    target_area: pg_regions CORE
+    category: rail
+    nets: {VDD VSS}
+    tag: PG_M1_M2_RAIL
+
+    layer: M1 {
+        widths: $M1_RAIL_WIDTH
+    }
+
+    layer: M2 {
+        widths: $M1_RAIL_WIDTH
+    }
+}
+
+StrapConfig: PG_M3_M4_MESH {
+    target_area: pg_regions CORE_EXPAND
+    category: mesh
+    nets: {VDD VSS}
+    tag: PG_M3_M4_MESH
+
+    layer: M3 {
+        widths: 0.38
+        direction: vertical
+        spacings: interleaving
+        pitch: 3.6
+        offset: 0
+        trim: false
+    }
+
+    layer: M4 {
+        widths: 0.38
+        direction: horizontal
+        spacings: interleaving
+        pitch: 3.6
+        offset: 0.33
+        trim: false
+    }
+}
+
+StrapConfig: PG_M5_M6_MESH {
+    target_area: pg_regions CORE_EXPAND
+    category: mesh
+    nets: {VDD VSS}
+    tag: PG_M5_M6_MESH
+
+    layer: M5 {
+        widths: 0.38
+        direction: vertical
+        spacings: interleaving
+        pitch: 3.6
+        offset: 0
+        trim: false
+    }
+
+    layer: M6 {
+        widths: 0.38
+        direction: horizontal
+        spacings: interleaving
+        pitch: 7.2
+        offset: 0.33
+        trim: false
+    }
+}
+
+StrapConfig: PG_M7_M8_MESH {
+    target_area: pg_regions CORE_EXPAND
+    category: mesh
+    nets: {VDD VSS}
+    extension: {{stop: outermost_ring}}
+    tag: PG_M7_M8_MESH
+
+    layer: M7 {
+        widths: 2.0
+        direction: vertical
+        spacings: interleaving
+        pitch: 14.4
+        offset: 0
+        trim: false
+    }
+
+    layer: M8 {
+        widths: 2.0
+        direction: horizontal
+        spacings: interleaving
+        pitch: 14.4
+        offset: 0.33
+        trim: false
+    }
+}
+
+ViaConfig: DEFAULT_VIA {
+    ViaRule: PG_VIA_M2_M3 {
+        target_area: pg_regions CORE_EXPAND
+	    category: wire_to_wire
+	    nets : {VDD VSS}
+        # Layer name:tag name
+	    upper_layer: M3
+	    lower_layer: M2
+        # VIAXX, FATVIAXX, VIAXX_OPTI VIAXX_OPTI_SQ
+        via_def: {VIA23 FATVIA23}
+	    allow_parallel: false
+    }
+
+    ViaRule: PG_VIA_M3_M4 {
+        target_area: pg_regions CORE_EXPAND
+	    category: wire_to_wire
+	    nets : {VDD VSS}
+        # Layer name:tag name
+	    upper_layer: M4
+	    lower_layer: M3
+        via_def: {VIA34 FATVIA34}
+	    allow_parallel: false
+    }
+
+    ViaRule: PG_VIA_M4_M5 {
+        target_area: pg_regions CORE_EXPAND
+	    category: wire_to_wire
+	    nets : {VDD VSS}
+        # Layer name:tag name
+	    upper_layer: M5
+	    lower_layer: M4
+        via_def: {VIA45 FATVIA45}
+	    allow_parallel: false
+    }
+
+    ViaRule: PG_VIA_M5_M6 {
+        target_area: pg_regions CORE_EXPAND
+	    category: wire_to_wire
+	    nets : {VDD VSS}
+        # Layer name:tag name
+	    upper_layer: M6
+	    lower_layer: M5
+        via_def: {VIA56 FATVIA56}
+	    allow_parallel: false
+    }
+
+    ViaRule: PG_VIA_M6_M7 {
+        target_area: pg_regions CORE_EXPAND
+	    category: wire_to_wire
+	    nets : {VDD VSS}
+	    upper_layer: M7
+	    lower_layer: M6
+        via_def: {VIA67 FATVIA67}
+	    allow_parallel: false
+    }
+
+    ViaRule: PG_VIA_M7_M8 {
+        target_area: pg_regions CORE_EXPAND
+	    category: wire_to_wire
+
+	    category: wire_to_wire
+	    nets : {VDD VSS}
+	    upper_layer: M8
+	    lower_layer: M7
+        tag: PG_VIA_M7_M8
+        via_def: {VIA78 FATVIA78}
+	    allow_parallel: false
+    }
+}
