@@ -738,13 +738,23 @@ To reduce the following items:
 
         - Reduce gate size and capacitance on non-critical paths
 
+        - $C_{gate} = C_{ox}WL$
+
     - Logic-Wire co-design
 
         - Logic optimization and routing are considered simultaneously to reduce interconnect capacitance
 
-    - Caching
+        - $C_{wire} \propto k \frac{L}{d}$
 
-        - L1, L2, L3 cache
+        - $k$ is dielectric, $L$ is pitch length and $d$ is diameter of the contacted wires' area  
+
+    - Intrinstic Cap
+
+        - $C = C_{gate} + C_{wire} + C_{diffusion}$
+
+        - $C_{diff} = C_jA + C_{jsw}P$, or written as $C_n + C_p$, the NMOS and PMOS drain diffusion
+    
+    - In advanced technology node, the capacitor won't decrease linearly and won't obey the Dennard's Scaling Rule
 
 - **V**
 
