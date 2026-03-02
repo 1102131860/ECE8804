@@ -34,6 +34,113 @@ $$t_{slack,hold} = t_{cq,min} + t_{logic,min} - t_{uncertain,min} - (t_{hold} + 
 
 - **Hold slack should be positive** otherwise it violates hold requirement
 
+## Timing Fix in ASIC Flow
+
+If you want to improve the working frequency, the more efficient way is to use **partitioning/pipeling at the Architecture/RTL design stage**, but here we discuss the **timing issues**
+
+### Stages to fix timing issues
+
+- Synthesis (The first large-scale timing change)
+
+    - Target: meet target frequency & optimize slack at logic level
+
+- Floorplan (Affect interconnect delay)
+
+    - distances between modules
+    - global bus/wire length
+    - congestion
+    - clock skew evaluation
+
+- Placement (One of the most optimizing)
+
+    - `opt_design`, repeatly do setup fix, hold fix, congestion fix
+
+- CTS
+
+    - Change clock latency
+    - Clock skew
+    - Insertion delay
+
+- Routing
+
+    - RC parasitic $R = \rho \frac{L}{A}$
+    - Coupling $C = \epsilon \frac{A}{d}$
+    - Crosstalk delay
+
+- Post-route Optimization (Sign-off timing fix)
+
+    - The most common timing fix stage
+
+- Signoff
+
+    - Now consider about messy reality of physics or PVT's effect
+        - OCV (On-chip varivation), AOCV, POCV
+        - SI (Signal Intergrity)
+        - IR drop
+        - Crosstalk
+    
+    - When STA/SI/IR signoff find violation, i.e., **freezing netlist**, but still find a setup/hold failure or IR hotspot, then move to **Engineering Change Order (ECO)**
+
+### Different layer's techniques to fix timing issues
+
+- **Gate-Level**
+
+    - Gating sizing
+    - Vt swap(HVT/LVT)
+    - Cell swap/Fanout Driving
+
+- **Register/Logic-Level**
+
+    - Retiming/Register balancing
+    - Pipelining
+    - Logic restructuring
+    - Multi-cycle path definition
+
+- **Buffer**
+
+    - Buffer insertion
+    - Repeater insertion
+    - Re-buffering long net
+
+- **Clock**
+
+    - Useful skew
+    - Clock tree balancing
+    - Clock latency tuning
+
+- **Routing**
+
+    - Shielding
+    - Incresing spacing
+    - Move to higher metal layer
+    - Widen wire
+    - Reduce Coupling
+
+- **Physical Layout**
+
+    - Cell spreading
+    - Congestion relief
+    - Move critical path cells closer
+
+### Techniques to fix setup and hold violation
+
+To fix the Setup violation:
+
+- Upsize cell
+- Use LVT cell
+- Insert driver/buffer
+- Shorten wire
+- Move cells closer
+- Reduce fanin/fanout
+
+To fix the Hold violation:
+
+- Insert delay cell
+- Insert buffer
+- Downsize cell
+- Use HVT
+- Increase routing length
+
 # Synthesis
 
 Produce a netlist with each cell referenced to a design in the target library (std-cells, memory, macros*)
